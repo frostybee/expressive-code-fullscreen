@@ -1,0 +1,32 @@
+{
+  "name": "@expressive-code-fullscreen/docs",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Documentation for the Expressive Code Fullscreen plugin.",
+  "author": "frostybee",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.34.6",
+    "astro": "^5.7.6",
+    "sharp": "^0.34.3",
+    "expressive-code-fullscreen": "workspace:*",
+    "typescript": "^5.8.3"
+  },
+  "private": true,
+  "sideEffects": false,  
+  "homepage": "https://github.com/frostybee/expressive-code-fullscreen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frostybee/expressive-code-fullscreen.git",
+    "directory": "docs"
+  },
+  "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues"
+}

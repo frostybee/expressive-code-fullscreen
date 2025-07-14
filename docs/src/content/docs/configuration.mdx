@@ -1,0 +1,120 @@
+---
+title: Configuration
+description: Configure the expressive-code-fullscreen plugin.
+---
+
+The Astro Starlight Code block Fullscreen plugin provides several configuration options to customize the fullscreen functionality for your code blocks. You can easily adjust these settings to fit your website's needs and user experience preferences.
+
+## Configuring Code Block Fullscreen
+---
+
+The Starlight Code block Fullscreen plugin can be configured in your `astro.config.mjs` file. To do this, you need to import the plugin and add it to the `plugins` array in your Starlight configuration.
+
+**Refer to the [example configuration](#example-configuration) below for a complete setup.**
+
+```javascript title="astro.config.mjs"
+import { defineConfig } from 'astro/config'
+import starlight from '@astrojs/starlight'
+import starlightCodeblockFullscreen from 'expressive-code-fullscreen'
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      plugins: [
+        starlightCodeblockFullscreen({
+          // Configuration options go here
+        }),
+      ],
+      title: 'My Docs',
+    }),
+  ],
+})
+```
+
+## Configuration Options
+---
+
+The Starlight code block fullscreen plugin accepts an object with the following options. You can customize these options to fit your needs. Default values are provided for each option.
+
+### `fullscreenButtonTooltip`
+
+- **Type**: `string`
+- **Default**: `"Toggle fullscreen view"`
+- **Description**: Defines the text displayed in the tooltip when hovering over the fullscreen toggle button. Customize this to provide a user-friendly message in your preferred language.
+
+### `enableEscapeKey`
+
+- **Type**: `boolean`
+- **Default**: `true`
+- **Description**: Controls whether the Escape key can be used to exit fullscreen mode. Set to `true` to allow users to press Escape to exit fullscreen, or `false` to disable this functionality.
+
+### `exitOnBrowserBack`
+
+- **Type**: `boolean`
+- **Default**: `true`
+- **Description**: Determines whether the browser's back button can be used to exit fullscreen mode. When enabled, the plugin adds a history entry when entering fullscreen, allowing users to use the back button to exit.
+
+### `addToUntitledBlocks`
+
+- **Type**: `boolean`
+- **Default**: `false`
+- **Description**: Controls whether the fullscreen button should be added to untitled code blocks (blocks without titles). Set to `true` to add buttons to all code blocks including untitled ones, or `false` to add buttons only to titled code blocks.
+
+### `svgPathFullscreenOn`
+
+- **Type**: `string`
+- **Default**: `"M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"`
+- **Description**: The SVG path for the fullscreen button when not in fullscreen mode (enter fullscreen icon). Customize this to use your own icon design.
+
+### `svgPathFullscreenOff`
+
+- **Type**: `string`
+- **Default**: `"M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"`
+- **Description**: The SVG path for the fullscreen button when in fullscreen mode (exit fullscreen icon). Customize this to use your own icon design.
+
+### `animationDuration`
+
+- **Type**: `number`
+- **Default**: `200`
+- **Range**: `150` to `700` milliseconds
+- **Description**: The duration of the fullscreen animation in milliseconds. Controls how fast the transition to and from fullscreen mode occurs. Values outside the range will be automatically adjusted to `200`.
+
+### Button Placement
+
+- **Titled blocks only**: Add buttons only to code blocks with titles (default)
+- **All blocks**: Include untitled code blocks with the `addToUntitledBlocks` option
+
+## Example Configuration
+---
+
+Here's a complete example showing how to configure all available options:
+
+```javascript title="astro.config.mjs"
+import { defineConfig } from 'astro/config'
+import starlight from '@astrojs/starlight'
+import starlightCodeblockFullscreen from 'expressive-code-fullscreen'
+
+export default defineConfig({
+  integrations: [
+    starlight({
+      plugins: [
+        starlightCodeblockFullscreen({
+          fullscreenButtonTooltip: 'View in fullscreen',
+          enableEscapeKey: true,
+          exitOnBrowserBack: true,
+          addToUntitledBlocks: false,
+          svgPathFullscreenOn: "M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z",
+          svgPathFullscreenOff: "M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z",
+          animationDuration: 300,
+        }),
+      ],
+      title: 'My Documentation',
+    }),
+  ],
+})
+```
+
+:::note
+The above configuration customizes the tooltip text, enables both escape key and back button navigation, adds fullscreen buttons only to titled code blocks, uses custom SVG icons, and sets a slower animation duration of 300ms.
+:::
+
