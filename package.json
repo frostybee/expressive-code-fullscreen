@@ -6,31 +6,24 @@
   "author": "frostybee",
   "type": "module",  
   
-  "devDependencies": {
-    "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.5",
+  "devDependencies": {    
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "eslint": "^9.27.0",
     "prettier": "^3.5.3",
-    "prettier-plugin-astro": "^0.14.1"    
-  },
-  "engines": {
-    "node": "^18.17.1 || ^20.3.0 || >=21.0.0"
-  },
+    "prettier-plugin-astro": "^0.14.1",    
+    "tsup": "^8.3.5"
+  },  
+  "dependencies": {
+		"@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.5"
+	},
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
   "packageManager": "pnpm@10.10.0",
   "sideEffects": false,
-  "private": true,
-  "homepage": "https://github.com/frostybee/expressive-code-fullscreen",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/frostybee/expressive-code-fullscreen.git",
-    "directory": "packages/expressive-code-fullscreen"
-  },
-  "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues",
+  "private": true,  
   "scripts": {          
     "build": "pnpm -F expressive-code-fullscreen build",
     "build:docs": "pnpm -F @expressive-code-fullscreen/docs build",

@@ -12,13 +12,16 @@
     "codeblock",
     "expressive-code"
   ],
-  "type": "module",
-  "exports": {
-    ".": "./src/index.js"
-  },
-  "files": [
-    "src"
-  ],
+  "main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"default": "./dist/index.js"
+	},
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
   "devDependencies": {
     "@astrojs/starlight": "^0.34.6",
     "@expressive-code/core": "^0.41.3",
@@ -43,5 +46,9 @@
     "url": "https://github.com/frostybee/expressive-code-fullscreen.git",
     "directory": "packages/expressive-code-fullscreen"
   },
-  "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues"
+  "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues",
+  "scripts": {
+		"build": "tsup",
+		"watch": "pnpm build --watch src"
+	}
 }
