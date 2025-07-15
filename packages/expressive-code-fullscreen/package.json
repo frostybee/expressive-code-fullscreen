@@ -1,6 +1,6 @@
 {
   "name": "expressive-code-fullscreen",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "description": "Add fullscreen functionality to codeblocks in your documentation website.",
   "author": "frostybee",
@@ -10,8 +10,8 @@
     "starlight",
     "fullscreen",
     "codeblock",
-    "expressive-code"    
-  ],  
+    "expressive-code"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.js"
@@ -43,5 +43,5 @@
     "url": "https://github.com/frostybee/expressive-code-fullscreen.git",
     "directory": "packages/expressive-code-fullscreen"
   },
-  "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues"  
+  "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues"
 }
