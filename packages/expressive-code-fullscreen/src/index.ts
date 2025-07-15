@@ -24,24 +24,36 @@ const fullscreenStyleSettings = new PluginStyleSettings({
 	},
 });
 
-/**
- * @typedef {Object} FullscreenPluginOptions
- * @property {boolean} [enabled=true] - Whether the plugin is enabled
- * @property {string} [fullscreenButtonTooltip='Toggle fullscreen view'] - Tooltip text for the fullscreen button
- * @property {boolean} [enableEscapeKey=true] - Whether to enable escape key to exit fullscreen
- * @property {boolean} [exitOnBrowserBack=true] - Whether to exit fullscreen on browser back button
- * @property {boolean} [addToUntitledBlocks=true] - Whether to add fullscreen button to untitled code blocks
- * @property {number} [animationDuration=200] - Animation duration in milliseconds
- * @property {string} [svgPathFullscreenOn] - SVG path for fullscreen on icon
- * @property {string} [svgPathFullscreenOff] - SVG path for fullscreen off icon
- */
+interface FullscreenPluginOptions {
+	/** Whether the plugin is enabled. Default: `true` */
+	enabled?: boolean;
+	
+	/** Tooltip text for the fullscreen button. Default: `'Toggle fullscreen view'` */
+	fullscreenButtonTooltip?: string;
+	
+	/** Whether to enable escape key to exit fullscreen. Default: `true` */
+	enableEscapeKey?: boolean;
+	
+	/** Whether to exit fullscreen on browser back button. Default: `true` */
+	exitOnBrowserBack?: boolean;
+	
+	/** Whether to add fullscreen button to untitled code blocks. Default: `true` */
+	addToUntitledBlocks?: boolean;
+	
+	/** Animation duration in milliseconds. Default: `200` */
+	animationDuration?: number;
+	
+	/** SVG path for fullscreen on icon */
+	svgPathFullscreenOn?: string;
+	
+	/** SVG path for fullscreen off icon */
+	svgPathFullscreenOff?: string;
+}
 
 /**
  * Creates an Expressive Code plugin that adds fullscreen functionality to code blocks
- * @param {FullscreenPluginOptions} options - Configuration options for the plugin
- * @returns {Object} The configured plugin instance
  */
-export function pluginFullscreen(options = {}) {
+export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 	const config = {
 		enabled: true,
 		fullscreenButtonTooltip: 'Toggle fullscreen view',

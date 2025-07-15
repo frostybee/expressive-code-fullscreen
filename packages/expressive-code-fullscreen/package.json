@@ -1,6 +1,7 @@
 {
   "name": "expressive-code-fullscreen",
   "version": "0.2.0",
+  "type": "module",
   "license": "MIT",
   "description": "Add fullscreen functionality to codeblocks in your documentation website.",
   "author": "frostybee",
@@ -13,19 +14,20 @@
     "expressive-code"
   ],
   "main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"exports": {
-		"types": "./dist/index.d.ts",
-		"default": "./dist/index.js"
-	},
-	"types": "./dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+  "module": "./dist/index.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@astrojs/starlight": "^0.34.6",
     "@expressive-code/core": "^0.41.3",
-    "astro": "^5.7.6"
+    "astro": "^5.7.6",
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "@astrojs/starlight": ">=0.34",
@@ -48,7 +50,7 @@
   },
   "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues",
   "scripts": {
-		"build": "tsup",
-		"watch": "pnpm build --watch src"
-	}
+    "build": "tsup",
+    "watch": "pnpm build --watch src"
+  }
 }
