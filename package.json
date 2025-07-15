@@ -32,6 +32,7 @@
   },
   "bugs": "https://github.com/frostybee/expressive-code-fullscreen/issues",
   "scripts": {          
+    "build": "pnpm -F expressive-code-fullscreen build",
     "build:docs": "pnpm -F @expressive-code-fullscreen/docs build",
     "start:docs": "pnpm -F @expressive-code-fullscreen/docs start",
     "ci-version": "changeset version && pnpm install --no-frozen-lockfile",
