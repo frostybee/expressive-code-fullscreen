@@ -1,6 +1,6 @@
 {
   "name": "@expressive-code-fullscreen/docs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "description": "Documentation for the Expressive Code Fullscreen plugin.",
   "author": "frostybee",
@@ -22,7 +22,7 @@
     "typescript": "^5.8.3"
   },
   "private": true,
-  "sideEffects": false,  
+  "sideEffects": false,
   "homepage": "https://github.com/frostybee/expressive-code-fullscreen",
   "repository": {
     "type": "git",
