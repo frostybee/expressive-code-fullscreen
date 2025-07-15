@@ -39,10 +39,12 @@ export default {
 
 ### Custom Configuration
 
-```js
+You can customize the plugin behavior by passing an options object to `pluginFullscreen()`:
+
+```js title="ec.config.mjs"
 import { pluginFullscreen } from 'expressive-code-fullscreen';
 
-export default {
+export default defineEcConfig({
   plugins: [
     pluginFullscreen({
       enabled: true,
@@ -51,17 +53,11 @@ export default {
       exitOnBrowserBack: true,
       addToUntitledBlocks: true,
       animationDuration: 300,
-      theme: {
-        containerBg: 'rgba(0, 0, 0, 0.85)',
-        toolbarBg: 'rgba(90, 88, 88, 0.95)',
-        buttonBg: 'rgba(58, 57, 57, 0.9)',
-        buttonBgHover: 'rgba(120, 120, 120, 0.5)',
-        buttonText: '#ffffff',
-        buttonFocus: 'rgba(74, 144, 226, 0.6)'
-      },
+      svgPathFullscreenOn: 'M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z',
+      svgPathFullscreenOff: 'M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z',
     }),
   ],
-};
+});
 ```
 
 ### Custom SVG Icons
@@ -86,16 +82,6 @@ pluginFullscreen({
   enableEscapeKey: true,
   exitOnBrowserBack: true,
   animationDuration: 250,
-  theme: {
-    // Match your site's design system.
-    containerBg: 'rgba(var(--sl-color-bg), 0.95)',
-    buttonBg: 'rgba(var(--sl-color-accent), 0.9)',
-    buttonText: 'var(--sl-color-white)',
-    toolbarBg: 'rgba(var(--sl-color-bg-nav), 0.95)',
-    toolbarBorder: 'rgba(var(--sl-color-gray-5), 0.3)',
-    buttonBorder: 'rgba(var(--sl-color-gray-5), 0.2)',
-    buttonFocus: 'rgba(var(--sl-color-accent), 0.6)',
-  }
 })
 ```
 
@@ -110,24 +96,7 @@ The fullscreen button will appear in the top-right corner of your code blocks, p
 
 # Fullscreen Plugin Theming System
 
-The Expressive Code Fullscreen Plugin now includes a comprehensive theming system that allows you to customize all visual aspects of the fullscreen interface.
-
-## Quick Start
-
-```javascript
-import { pluginFullscreen } from 'expressive-code-fullscreen';
-
-// Use the plugin with custom theme
-const fullscreenPlugin = pluginFullscreen({
-  theme: {
-    toolbarBg: 'rgba(30, 30, 30, 0.95)',
-    buttonBg: 'rgba(20, 20, 20, 0.9)',
-    buttonBgHover: 'rgba(45, 45, 45, 0.9)',
-    buttonText: '#e0e0e0',
-    // ... other theme options. 
-  }
-});
-```
+You can override the default styles in your Expressive Code config using the `styleOverrides.fullscreen` object if you want to change the colors, fonts, or other styles of the fullscreen plugin.
 
 ## Available Theme Options
 
@@ -177,105 +146,80 @@ const fullscreenPlugin = pluginFullscreen({
   - Default: `'rgba(255, 255, 255, 0.2)'`
 
 
-## CSS Custom Properties
+## Quick Start
 
-The theming system generates CSS custom properties that you can also override directly in your CSS:
-
-```css
-:root {
-  --cb-fs-toolbar-bg: your-custom-color;
-  --cb-fs-toolbar-border: your-border-color;
-  --cb-fs-button-bg: your-button-color;
-  --cb-fs-button-bg-hover: your-hover-color;
-  --cb-fs-button-bg-active: your-active-color;
-  --cb-fs-button-text: your-text-color;
-  --cb-fs-button-border: your-button-border;
-  --cb-fs-button-focus: your-focus-color;
-  --cb-fs-container-bg: your-container-bg;
-  --cb-fs-content-shadow: your-shadow-color;
-  --cb-fs-hint-bg: your-hint-bg;
-  --cb-fs-hint-text: your-hint-text;
-  --cb-fs-hint-border: your-hint-border;
+```javascript
+{
+  plugins: [pluginFullscreen()],
+  styleOverrides: {
+    fullscreen: {
+      toolbarBg: 'rgba(30, 30, 30, 0.95)',
+      buttonBg: 'rgba(20, 20, 20, 0.9)',
+      buttonBgHover: 'rgba(45, 45, 45, 0.9)',
+      buttonText: '#e0e0e0',
+      // ... other theme options
+    }
+  }
 }
 ```
 
-## Theme Examples
+## Complete Theme Configuration Example
 
-### Dark Blue Theme
+Here's a complete example showing all available theme options with their default values:
+
 ```javascript
-pluginFullscreen({
-  theme: {
-    toolbarBg: 'rgba(25, 39, 52, 0.95)',
-    toolbarBorder: 'rgba(100, 149, 237, 0.3)',
-    buttonBg: 'rgba(15, 29, 42, 0.9)',
-    buttonBgHover: 'rgba(35, 49, 62, 0.9)',
-    buttonBgActive: 'rgba(5, 19, 32, 0.9)',
-    buttonText: '#e6f3ff',
-    buttonBorder: 'rgba(100, 149, 237, 0.4)',
-    buttonFocus: 'rgba(100, 149, 237, 0.8)',
-    containerBg: 'rgba(10, 25, 41, 0.9)',
-    contentShadow: 'rgba(0, 20, 40, 0.6)',
-    hintBg: 'rgba(15, 29, 42, 0.95)',
-    hintText: '#e6f3ff',
-    hintBorder: 'rgba(100, 149, 237, 0.3)',
+{
+  plugins: [pluginFullscreen()],
+  styleOverrides: {
+    fullscreen: {
+      // Toolbar styling.
+      toolbarBg: 'rgba(90, 88, 88, 0.95)',
+      toolbarBorder: 'rgba(255, 255, 255, 0.1)',
+      
+      // Button styling.
+      buttonBg: 'rgba(58, 57, 57, 0.9)',
+      buttonBgHover: 'rgba(120, 120, 120, 0.5)',
+      buttonBgActive: 'rgba(25, 25, 25, 0.9)',
+      buttonText: '#ffffff',
+      buttonBorder: 'rgba(255, 255, 255, 0.2)',
+      buttonFocus: 'rgba(74, 144, 226, 0.6)',
+      
+      // Container and effects.
+      containerBg: 'rgba(0, 0, 0, 0.85)',
+      contentShadow: 'rgba(0, 0, 0, 0.5)',
+      
+      // Hints and tooltips.
+      hintBg: 'rgba(20, 20, 20, 0.95)',
+      hintText: '#ffffff',
+      hintBorder: 'rgba(255, 255, 255, 0.2)',
+    }
   }
-})
+}
 ```
 
-### Light Theme
-```javascript
-pluginFullscreen({
-  theme: {
-    toolbarBg: 'rgba(248, 249, 250, 0.95)',
-    toolbarBorder: 'rgba(0, 0, 0, 0.1)',
-    buttonBg: 'rgba(255, 255, 255, 0.9)',
-    buttonBgHover: 'rgba(243, 244, 246, 0.9)',
-    buttonBgActive: 'rgba(229, 231, 235, 0.9)',
-    buttonText: '#374151',
-    buttonBorder: 'rgba(0, 0, 0, 0.2)',
-    buttonFocus: 'rgba(59, 130, 246, 0.6)',
-    containerBg: 'rgba(255, 255, 255, 0.95)',
-    contentShadow: 'rgba(0, 0, 0, 0.1)',
-    hintBg: 'rgba(255, 255, 255, 0.95)',
-    hintText: '#374151',
-    hintBorder: 'rgba(0, 0, 0, 0.1)',
-  }
-})
-```
+### Custom Theme Example
 
-### Custom Brand Colors
 ```javascript
-pluginFullscreen({
-  theme: {
-    toolbarBg: 'rgba(67, 56, 202, 0.95)',
-    buttonBg: 'rgba(99, 102, 241, 0.9)',
-    buttonBgHover: 'rgba(129, 140, 248, 0.9)',
-    buttonText: '#ffffff',
-    buttonFocus: 'rgba(168, 85, 247, 0.6)',
-    containerBg: 'rgba(30, 27, 75, 0.9)',
-    hintBg: 'rgba(67, 56, 202, 0.95)',
+{
+  plugins: [pluginFullscreen()],
+  styleOverrides: {
+    fullscreen: {
+      // Dark blue theme.
+      toolbarBg: 'rgba(25, 39, 52, 0.95)',
+      toolbarBorder: 'rgba(100, 149, 237, 0.3)',
+      buttonBg: 'rgba(15, 29, 42, 0.9)',
+      buttonBgHover: 'rgba(35, 49, 62, 0.9)',
+      buttonBgActive: 'rgba(5, 19, 32, 0.9)',
+      buttonText: '#e6f3ff',
+      buttonBorder: 'rgba(100, 149, 237, 0.4)',
+      buttonFocus: 'rgba(100, 149, 237, 0.8)',
+      containerBg: 'rgba(10, 25, 41, 0.9)',
+      contentShadow: 'rgba(0, 20, 40, 0.6)',
+      hintBg: 'rgba(15, 29, 42, 0.95)',
+      hintText: '#e6f3ff',
+      hintBorder: 'rgba(100, 149, 237, 0.3)',
+    }
   }
-})
-```
-
-### Purple Theme
-```javascript
-pluginFullscreen({
-  theme: {
-    toolbarBg: 'rgba(76, 29, 149, 0.95)',
-    toolbarBorder: 'rgba(167, 139, 250, 0.3)',
-    buttonBg: 'rgba(59, 7, 100, 0.9)',
-    buttonBgHover: 'rgba(91, 33, 182, 0.9)',
-    buttonBgActive: 'rgba(49, 7, 90, 0.9)',
-    buttonText: '#f3e8ff',
-    buttonBorder: 'rgba(167, 139, 250, 0.4)',
-    buttonFocus: 'rgba(167, 139, 250, 0.8)',
-    containerBg: 'rgba(35, 7, 70, 0.9)',
-    contentShadow: 'rgba(76, 29, 149, 0.4)',
-    hintBg: 'rgba(59, 7, 100, 0.95)',
-    hintText: '#f3e8ff',
-    hintBorder: 'rgba(167, 139, 250, 0.3)',
-  }
-})
+}
 ```
 
