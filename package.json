@@ -5,6 +5,7 @@
   "description": "Add fullscreen functionality to codeblocks in your documentation website.",
   "author": "frostybee",
   "type": "module",  
+  
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.5",

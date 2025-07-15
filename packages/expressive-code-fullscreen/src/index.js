@@ -18,7 +18,7 @@ export function pluginFullscreen(options = {}) {
 			toolbarBg: 'rgba(90, 88, 88, 0.95)',
 			toolbarBorder: 'rgba(255, 255, 255, 0.1)',
 			buttonBg: 'rgba(58, 57, 57, 0.9)',
-			buttonBgHover: 'rgba(65, 65, 65, 0.9)',
+			buttonBgHover: 'rgba(120, 120, 120, 0.5)',
 			buttonBgActive: 'rgba(25, 25, 25, 0.9)',
 			buttonText: '#ffffff',
 			buttonBorder: 'rgba(255, 255, 255, 0.2)',
@@ -286,21 +286,29 @@ export function pluginFullscreen(options = {}) {
         border-radius: 0.25rem;
         color: inherit;
         position: absolute;
-        top: 8px;
+        top: 4px;
         right: 8px;
         z-index: 100;
       }
 
       .expressive-code:not(.has-title) .cb-fullscreen__button,
       .expressive-code .frame:not(.has-title) ~ * .cb-fullscreen__button {
-        top: 44px !important;
+        top: 52px !important;
         right: 10px !important;
+      }
+
+      /* Terminal blocks - position button in figcaption header */
+      .expressive-code .frame.is-terminal .cb-fullscreen__button {
+        position: absolute !important;
+        top: 4px !important;
+        right: 8px !important;
+        z-index: 100 !important;
       }
 
       .cb-fullscreen__button:hover {
         opacity: 1;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        background-color: var(--cb-fs-button-bg-hover);
+        border: 1px solid var(--cb-fs-button-border);
         transform: scale(1.1);
       }
 
@@ -330,6 +338,39 @@ export function pluginFullscreen(options = {}) {
 
       .expressive-code.cb-fullscreen__active .cb-fullscreen__button .fullscreen-off {
         display: inline !important;
+      }
+
+      /* Custom tooltip for fullscreen button */
+      .cb-fullscreen__button[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--cb-fs-hint-bg);
+        color: var(--cb-fs-hint-text);
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        z-index: 10001;
+        margin-right: 0.5rem;
+        border: 1px solid var(--cb-fs-hint-border);
+        box-shadow: 0 0.25rem 0.75rem var(--cb-fs-content-shadow);
+        pointer-events: none;
+        opacity: 0;
+        animation: tooltipFadeIn 0.2s ease-out forwards;
+      }
+
+      @keyframes tooltipFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-50%) translateX(0.25rem);
+        }
+        to {
+          opacity: 0.9;
+          transform: translateY(-50%) translateX(0);
+        }
       }
     `,
 
@@ -396,7 +437,37 @@ export function pluginFullscreen(options = {}) {
 					]
 				);
 
-				context.renderData.blockAst.children.push(fullscreenButton);
+				// Find the frame element and inject button into figcaption.
+				const frameElement = context.renderData.blockAst.children.find(
+					child => child.type === 'element' && child.tagName === 'figure'
+				);
+
+				if (frameElement) {
+					// Check if this is a terminal or has a title.
+					const frameClasses = frameElement.properties?.className || [];
+					const classString = Array.isArray(frameClasses) ? frameClasses.join(' ') : frameClasses;
+					const isTerminal = classString.includes('is-terminal');
+					const hasTitle = classString.includes('has-title');
+
+					// If we don't add to untitled blocks and this doesn't have title or terminal styling, skip.
+					if (!config.addToUntitledBlocks && !hasTitle && !isTerminal) {
+						return;
+					}
+
+					const figcaption = frameElement.children?.find(
+						child => child.type === 'element' && child.tagName === 'figcaption'
+					);
+
+					if (figcaption) {
+						figcaption.children = figcaption.children || [];
+						figcaption.children.push(fullscreenButton);
+					} else {
+						frameElement.children = frameElement.children || [];
+						frameElement.children.push(fullscreenButton);
+					}
+				} else {
+					context.renderData.blockAst.children.push(fullscreenButton);
+				}
 			},
 		},
 
@@ -410,10 +481,11 @@ export function pluginFullscreen(options = {}) {
           MIN_FONT_SIZE: 60,
           MAX_FONT_SIZE: 500,
           DEFAULT_FONT_SIZE: 100,
-          FONT_ADJUSTMENT: 5,
+          FONT_ADJUSTMENT: 7,
           DOUBLE_CLICK_THRESHOLD: 600,
           HINT_DISPLAY_TIME: 4000,
-          FADE_TRANSITION_TIME: 500
+          FADE_TRANSITION_TIME: 500,
+          MIN_BLOCK_HEIGHT: 95
         };
 
         // Plugin configuration.
@@ -574,6 +646,17 @@ export function pluginFullscreen(options = {}) {
         function initializeFullscreenButtons() {
           const buttons = document.querySelectorAll('.cb-fullscreen__button');
           buttons.forEach(button => {
+            const codeBlock = button.closest('.expressive-code');
+            if (codeBlock) {
+              const frame = codeBlock.querySelector('.frame');
+
+              // Check if block is tall enough to show fullscreen button
+              if (frame && frame.offsetHeight < CONSTANTS.MIN_BLOCK_HEIGHT) {
+                button.style.display = 'none';
+                return;
+              }
+            }
+
             button.addEventListener('click', handleFullscreenClick);
             button.addEventListener('keydown', function(event) {
               if (event.key === 'Enter' || event.key === ' ') {

@@ -1,68 +1,127 @@
 ---
 title: Getting Started
+description: How to install and use the Expressive Code Fullscreen plugin in your website.
 ---
 
-Add fullscreen functionality to code blocks in your Starlight documentation website. This plugin enhances Expressive Code blocks by adding a fullscreen toggle button that allows users to view code in an immersive fullscreen mode.
+The Fullscreen plugin enhances [Expressive Code](https://expressive-code.com/) blocks on your website by adding a fullscreen viewing mode with font size controls, keyboard navigation, and extensive customization options.
 
-## Prerequisites
+This 
 
-You will need to have a Starlight website set up.
-If you don't have one yet, you can follow the ["Getting Started"](https://starlight.astro.build/getting-started) guide in the Starlight docs to create one.
+This guide will show you how to add it to your website.
 
-## Installation
+## Set-up
 
-import { Steps, Tabs, TabItem } from '@astrojs/starlight/components'
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import { PackageManagers } from 'starlight-package-managers';
 
 <Steps>
 
-1. `starlight-codeblock-fullscreen` is a Starlight [plugin](https://starlight.astro.build/reference/plugins/). Install it by running the following command in your terminal:
+1. Install the `expressive-code-fullscreen` dependency using your preferred package manager:
 
-   <Tabs syncKey="pkg">
+   <PackageManagers pkg="expressive-code-fullscreen" />
 
-   <TabItem label="npm">
+2. Add the plugin to your site's Expressive Code configuration:
 
-   ```sh
-   npm install starlight-codeblock-fullscreen
+   <Tabs>
+
+   <TabItem label="Astro">
+
+   ```js title="astro.config.mjs" ins={3,8}
+   import { defineConfig } from 'astro/config';
+   import astroExpressiveCode from 'astro-expressive-code';
+   import { pluginFullscreen } from 'expressive-code-fullscreen';
+
+   export default defineConfig({
+   	integrations: [
+   		astroExpressiveCode({
+   			plugins: [pluginFullscreen()],
+   		}),
+   	],
+   });
    ```
 
    </TabItem>
 
-   <TabItem label="pnpm">
+   <TabItem label="Starlight">
 
-   ```sh
-   pnpm add starlight-codeblock-fullscreen
+   ```js title="astro.config.mjs" ins={3,10}
+   import { defineConfig } from 'astro/config';
+   import starlight from '@astrojs/starlight';
+   import { pluginFullscreen } from 'expressive-code-fullscreen';
+
+   export default defineConfig({
+   	integrations: [
+   		starlight({
+   			title: 'My Starlight site',
+   			expressiveCode: {
+   				plugins: [pluginFullscreen()],
+   			},
+   		}),
+   	],
+   });
    ```
 
    </TabItem>
 
-   <TabItem label="Yarn">
+   <TabItem label="Next.js">
 
-   ```sh
-   yarn add starlight-codeblock-fullscreen
+   ```js title="next.config.mjs" ins={3,7}
+   import createMDX from '@next/mdx';
+   import rehypeExpressiveCode from 'rehype-expressive-code';
+   import { pluginFullscreen } from 'expressive-code-fullscreen';
+
+   /** @type {import('rehype-expressive-code').RehypeExpressiveCodeOptions} */
+   const rehypeExpressiveCodeOptions = {
+   	plugins: [pluginFullscreen()],
+   };
+
+   /** @type {import('next').NextConfig} */
+   const nextConfig = {
+   	reactStrictMode: true,
+   	pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+   };
+
+   const withMDX = createMDX({
+   	extension: /\.mdx?$/,
+   	options: {
+   		remarkPlugins: [],
+   		rehypePlugins: [
+   			// The nested array structure is required to pass options
+   			// to a rehype plugin
+   			[rehypeExpressiveCode, rehypeExpressiveCodeOptions],
+   		],
+   	},
+   });
+
+   export default withMDX(nextConfig);
+   ```
+
+   </TabItem>
+
+   <TabItem label="EC config file">
+
+   ```js title="ec.config.mjs" ins={1,4}
+   import { pluginFullscreen } from 'expressive-code-fullscreen';
+
+   export default {
+   	plugins: [pluginFullscreen()],
+   };
    ```
 
    </TabItem>
 
    </Tabs>
 
-2. Configure the plugin in your Starlight [configuration](https://starlight.astro.build/reference/configuration/#plugins) in the `astro.config.mjs` file.
-
-   ```diff lang="js"
-   // astro.config.mjs
-   import starlight from '@astrojs/starlight'
-   import { defineConfig } from 'astro/config'
-   +import starlightCodeblockFullscreen from 'starlight-codeblock-fullscreen'
-
-   export default defineConfig({
-     integrations: [
-       starlight({
-   +      plugins: [starlightCodeblockFullscreen()],
-         title: 'My Docs',
-       }),
-     ],
-   })
-   ```
-
-3. [Start the development server](https://starlight.astro.build/getting-started/#start-the-development-server) to see the fullscreen toggle buttons added to your code blocks.
+3. That's it! The Fullscreen plugin works out of the box with sensible defaults.
 
 </Steps>
+
+## Usage
+
+For more information on how to configure the plugin, see the [Configuration](../configuration) page.
+
+
+## Support
+
+This plugin is open-source software licensed under the MIT license.
+If you run into any bugs, please [report issues on GitHub](https://github.com/frostybee/expressive-code-fullscreen/issues).
