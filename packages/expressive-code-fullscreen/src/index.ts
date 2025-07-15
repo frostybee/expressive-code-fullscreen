@@ -40,6 +40,9 @@ interface FullscreenPluginOptions {
 	/** Whether to add fullscreen button to untitled code blocks. Default: `true` */
 	addToUntitledBlocks?: boolean;
 	
+	/** Whether to show fullscreen button only on hover for untitled, non-terminal blocks. Default: `true` */
+	showOnHoverOnly?: boolean;
+	
 	/** Animation duration in milliseconds. Default: `200` */
 	animationDuration?: number;
 	
@@ -60,6 +63,7 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 		enableEscapeKey: true,
 		exitOnBrowserBack: true,
 		addToUntitledBlocks: true,
+		showOnHoverOnly: true,
 		animationDuration: 200,
 		svgPathFullscreenOn:
 			'M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z',
@@ -300,12 +304,12 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
         width: 1.75rem;
         height: 1.75rem;
         padding: 0.25rem;
-        background: transparent;
+        background-color: rgba(255, 255, 255, 0.1) !important;
         border: none;
         cursor: pointer;
         opacity: 0.7;
         transition: opacity 0.2s, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
-        border-radius: 0.25rem;
+        border-radius: 50% !important;
         color: inherit;
         position: absolute;
         top: 4px;
@@ -326,6 +330,32 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
         right: 8px !important;
         z-index: 100 !important;
       }
+
+      /* Hover-only visibility for untitled, non-terminal blocks */
+      ${config.showOnHoverOnly ? `
+      .expressive-code:not(.has-title) .cb-fullscreen__button,
+      .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button {
+        opacity: 0;
+        transition: opacity 0.2s ease, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
+      }
+
+      .expressive-code:not(.has-title):hover .cb-fullscreen__button,
+      .expressive-code:hover .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button,
+      .expressive-code:not(.has-title) .cb-fullscreen__button:focus,
+      .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus,
+      .expressive-code:not(.has-title) .cb-fullscreen__button:focus-visible,
+      .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus-visible {
+        opacity: 0.7;
+      }
+
+      /* Mobile/touch device fallback - show button on touch devices */
+      @media (hover: none) and (pointer: coarse) {
+        .expressive-code:not(.has-title) .cb-fullscreen__button,
+        .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button {
+          opacity: 0.7;
+        }
+      }
+      ` : ''}
 
       .cb-fullscreen__button:hover {
         opacity: 1;
