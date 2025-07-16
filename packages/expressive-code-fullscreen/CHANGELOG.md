@@ -1,5 +1,11 @@
 # expressive-code-fullscreen
 
+## 1.0.0
+
+### Major Changes
+
+- 6ca8b61: Refactor the behavior of the fullscreen toggle button
+
 ## 0.3.0
 
 ### Minor Changes
