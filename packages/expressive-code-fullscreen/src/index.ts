@@ -331,19 +331,19 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
         z-index: 100 !important;
       }
 
-      /* Hover-only visibility for untitled, non-terminal blocks */
+      /* Hover-only visibility for untitled, non-terminal blocks ONLY */
       ${config.showOnHoverOnly ? `
-      .expressive-code:not(.has-title) .cb-fullscreen__button,
+      .expressive-code:not(.has-title) .cb-fullscreen__button:not(.frame.is-terminal *),
       .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button {
         opacity: 0;
         transition: opacity 0.2s ease, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
       }
 
-      .expressive-code:not(.has-title):hover .cb-fullscreen__button,
+      .expressive-code:not(.has-title):hover .cb-fullscreen__button:not(.frame.is-terminal *),
       .expressive-code:hover .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button,
-      .expressive-code:not(.has-title) .cb-fullscreen__button:focus,
+      .expressive-code:not(.has-title) .cb-fullscreen__button:focus:not(.frame.is-terminal *),
       .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus,
-      .expressive-code:not(.has-title) .cb-fullscreen__button:focus-visible,
+      .expressive-code:not(.has-title) .cb-fullscreen__button:focus-visible:not(.frame.is-terminal *),
       .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus-visible {
         opacity: 0.7;
         border: 2px solid #888888 !important;
@@ -352,7 +352,7 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 
       /* Mobile/touch device fallback - show button on touch devices */
       @media (hover: none) and (pointer: coarse) {
-        .expressive-code:not(.has-title) .cb-fullscreen__button,
+        .expressive-code:not(.has-title) .cb-fullscreen__button:not(.frame.is-terminal *),
         .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button {
           opacity: 0.7;
         }
@@ -361,7 +361,7 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 
       .cb-fullscreen__button:hover {
         opacity: 1;
-        background-color: ${cssVar('fullscreen.buttonBgHover')};
+        background-color: rgba(0, 0, 0, 0.2) !important;
         border: 1px solid ${cssVar('fullscreen.buttonBorder')};
         transform: scale(1.1);
       }
