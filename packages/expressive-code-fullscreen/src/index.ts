@@ -305,11 +305,11 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
         height: 1.75rem;
         padding: 0.25rem;
         background-color: rgba(255, 255, 255, 0.1) !important;
-        border: none;
+        border: 1px solid transparent;
         cursor: pointer;
         opacity: 0.7;
         transition: opacity 0.2s, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
-        border-radius: 50% !important;
+        border-radius: 20% !important;
         color: inherit;
         position: absolute;
         top: 4px;
@@ -346,6 +346,8 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
       .expressive-code:not(.has-title) .cb-fullscreen__button:focus-visible,
       .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus-visible {
         opacity: 0.7;
+        border: 2px solid #888888 !important;
+        border-radius: 0.25rem !important;
       }
 
       /* Mobile/touch device fallback - show button on touch devices */
