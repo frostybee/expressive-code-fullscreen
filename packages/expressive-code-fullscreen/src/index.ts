@@ -311,40 +311,42 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
         transition: opacity 0.2s, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
         border-radius: 20% !important;
         color: inherit;
+        /* Default: absolute positioning for untitled blocks */
         position: absolute;
-        top: 4px;
-        right: 8px;
+        top: 52px;
+        right: 10px;
         z-index: 100;
       }
 
-      .expressive-code:not(.has-title) .cb-fullscreen__button,
-      .expressive-code .frame:not(.has-title) ~ * .cb-fullscreen__button {
-        top: 52px !important;
-        right: 10px !important;
+      /* When inside figcaption header, use flex-compatible relative positioning and always visible */
+      figcaption .cb-fullscreen__button,
+      .header .cb-fullscreen__button {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        margin-inline-start: auto;
+        margin-inline-end: 0.5rem;
+        opacity: 1 !important;
+        transform: none !important;
       }
 
-      /* Terminal blocks - position button in figcaption header */
-      .expressive-code .frame.is-terminal .cb-fullscreen__button {
-        position: absolute !important;
-        top: 4px !important;
-        right: 8px !important;
-        z-index: 100 !important;
+      /* Override hover effects for header buttons - keep them stable */
+      figcaption .cb-fullscreen__button:hover,
+      .header .cb-fullscreen__button:hover {
+        opacity: 0.7 !important;
+        transform: none !important;
       }
 
-      /* Hover-only visibility for untitled, non-terminal blocks ONLY */
+      /* Hover-only visibility for untitled, non-terminal blocks (only buttons outside figcaption) */
       ${config.showOnHoverOnly ? `
-      .expressive-code:not(.has-title) .cb-fullscreen__button:not(.frame.is-terminal *),
-      .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button {
+      .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button {
         opacity: 0;
         transition: opacity 0.2s ease, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
       }
 
-      .expressive-code:not(.has-title):hover .cb-fullscreen__button:not(.frame.is-terminal *),
-      .expressive-code:hover .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button,
-      .expressive-code:not(.has-title) .cb-fullscreen__button:focus:not(.frame.is-terminal *),
-      .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus,
-      .expressive-code:not(.has-title) .cb-fullscreen__button:focus-visible:not(.frame.is-terminal *),
-      .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button:focus-visible {
+      .expressive-code:not(.has-title):hover .frame:not(.is-terminal) > .cb-fullscreen__button,
+      .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button:focus,
+      .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button:focus-visible {
         opacity: 0.7;
         border: 2px solid #888888 !important;
         border-radius: 0.25rem !important;
@@ -352,8 +354,7 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 
       /* Mobile/touch device fallback - show button on touch devices */
       @media (hover: none) and (pointer: coarse) {
-        .expressive-code:not(.has-title) .cb-fullscreen__button:not(.frame.is-terminal *),
-        .expressive-code .frame:not(.has-title):not(.is-terminal) ~ * .cb-fullscreen__button {
+        .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button {
           opacity: 0.7;
         }
       }
@@ -493,10 +494,27 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 					]
 				);
 
-				// Find the frame element and inject button into figcaption.
-				const frameElement = context.renderData.blockAst.children.find(
-					child => child.type === 'element' && child.tagName === 'figure'
-				);
+				// Find the frame element - it might BE the blockAst, in direct children, or nested deeper
+				// (e.g., when collapsible plugin wraps the figure in .ec-collapse > .ec-collapse__content)
+				const ast = context.renderData.blockAst;
+				let frameElement: typeof ast | null = null;
+
+				// Recursive function to find figure element anywhere in the tree
+				function findFigure(node: any): any {
+					if (!node) return null;
+					if (node.type === 'element' && node.tagName === 'figure') {
+						return node;
+					}
+					if (node.children) {
+						for (const child of node.children) {
+							const found = findFigure(child);
+							if (found) return found;
+						}
+					}
+					return null;
+				}
+
+				frameElement = findFigure(ast);
 
 				if (frameElement && frameElement.type === 'element') {
 					// Check if this is a terminal or has a title.
