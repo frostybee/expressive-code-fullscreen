@@ -1,0 +1,37 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:recommended",
+		":disableDependencyDashboard",
+		":disablePeerDependencies",
+		"helpers:pinGitHubActionDigestsToSemver"
+	],
+	"rangeStrategy": "bump",
+	"ignorePaths": ["**/node_modules/**"],
+	"minimumReleaseAge": "3 days",
+	"postUpdateOptions": ["pnpmDedupe"],
+	"packageRules": [
+		{
+			"groupName": "github-actions",
+			"matchManagers": ["github-actions"]
+		},
+		{
+			"groupName": "expressive-code",
+			"matchDatasources": ["npm"],
+			"matchPackageNames": ["@expressive-code/**", "expressive-code"]
+		},
+		{
+			"groupName": "astro",
+			"matchDatasources": ["npm"],
+			"matchPackageNames": ["astro", "@astrojs/**"],
+			"excludePackageNames": ["@astrojs/starlight"]
+		},
+		{
+			"groupName": "starlight",
+			"matchDatasources": ["npm"],
+			"matchPackageNames": ["@astrojs/starlight"],
+			"minimumReleaseAge": "7 days",
+			"prPriority": -1
+		}
+	]
+}
