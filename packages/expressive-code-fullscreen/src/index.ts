@@ -318,16 +318,25 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
         z-index: 100;
       }
 
+      /* Push all buttons in figcaption to the right as a group */
+      figcaption button:first-of-type {
+        margin-inline-start: auto !important;
+      }
+
       /* When inside figcaption header, use flex-compatible relative positioning and always visible */
       figcaption .cb-fullscreen__button,
       .header .cb-fullscreen__button {
         position: relative !important;
         top: auto !important;
         right: auto !important;
-        margin-inline-start: auto;
         margin-inline-end: 0.5rem;
         opacity: 1 !important;
         transform: none !important;
+      }
+
+      /* Push button down slightly for titled non-terminal blocks */
+      .expressive-code.has-title:not(.is-terminal) figcaption .cb-fullscreen__button {
+        margin-top: 0.25rem;
       }
 
       /* Override hover effects for header buttons - keep them stable */
@@ -339,14 +348,14 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 
       /* Hover-only visibility for untitled, non-terminal blocks (only buttons outside figcaption) */
       ${config.showOnHoverOnly ? `
-      .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button {
+      .expressive-code:not(.has-title):not(.is-terminal) > .cb-fullscreen__button {
         opacity: 0;
         transition: opacity 0.2s ease, background-color 0.2s, border-color 0.2s, transform 0.2s ease;
       }
 
-      .expressive-code:not(.has-title):hover .frame:not(.is-terminal) > .cb-fullscreen__button,
-      .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button:focus,
-      .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button:focus-visible {
+      .expressive-code:not(.has-title):not(.is-terminal):hover > .cb-fullscreen__button,
+      .expressive-code:not(.has-title):not(.is-terminal) > .cb-fullscreen__button:focus,
+      .expressive-code:not(.has-title):not(.is-terminal) > .cb-fullscreen__button:focus-visible {
         opacity: 0.7;
         border: 2px solid #888888 !important;
         border-radius: 0.25rem !important;
@@ -354,7 +363,7 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 
       /* Mobile/touch device fallback - show button on touch devices */
       @media (hover: none) and (pointer: coarse) {
-        .expressive-code:not(.has-title) .frame:not(.is-terminal) > .cb-fullscreen__button {
+        .expressive-code:not(.has-title):not(.is-terminal) > .cb-fullscreen__button {
           opacity: 0.7;
         }
       }
@@ -528,14 +537,21 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 						return;
 					}
 
-					const figcaption = frameElement.children?.find(
-						(child: any) => child.type === 'element' && child.tagName === 'figcaption'
-					);
+					// Only append to figcaption if the frame has a visible header (title or terminal)
+					if (hasTitle || isTerminal) {
+						const figcaption = frameElement.children?.find(
+							(child: any) => child.type === 'element' && child.tagName === 'figcaption'
+						);
 
-					if (figcaption && figcaption.type === 'element') {
-						figcaption.children = figcaption.children || [];
-						figcaption.children.push(fullscreenButton);
+						if (figcaption && figcaption.type === 'element') {
+							figcaption.children = figcaption.children || [];
+							figcaption.children.push(fullscreenButton);
+						} else {
+							frameElement.children = frameElement.children || [];
+							frameElement.children.push(fullscreenButton);
+						}
 					} else {
+						// For untitled, non-terminal blocks, append to frame for absolute positioning
 						frameElement.children = frameElement.children || [];
 						frameElement.children.push(fullscreenButton);
 					}
@@ -777,6 +793,16 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
             clonedBlock.classList.add('expressive-code');
           }
 
+          // Auto-expand collapsed code blocks in fullscreen (for expressive-code-collapsible compatibility)
+          const collapseWrapper = clonedBlock.querySelector('.ec-collapse--collapsed');
+          if (collapseWrapper) {
+            collapseWrapper.classList.remove('ec-collapse--collapsed');
+            collapseWrapper.classList.add('ec-collapse--expanded');
+
+            // Update aria-expanded on collapse toggle buttons
+            const collapseButtons = collapseWrapper.querySelectorAll('.ec-collapse__toggle, .ec-collapse__header-toggle');
+            collapseButtons.forEach(btn => btn.setAttribute('aria-expanded', 'true'));
+          }
 
           // Force full width with inline styles.
           // Styles handled in baseStyles (.expressive-code.cb-fullscreen__active).
