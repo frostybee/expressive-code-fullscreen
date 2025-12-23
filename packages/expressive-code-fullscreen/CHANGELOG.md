@@ -1,5 +1,11 @@
 # expressive-code-fullscreen
 
+## 1.1.0
+
+### Minor Changes
+
+- fe00b64: Fixed issue with overlapping buttons in the codeblock frame when mutliple Expressive Code plugins are enabled at once.
+
 ## 1.0.0
 
 ### Major Changes
