@@ -336,7 +336,7 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
 
       /* Push button down slightly for titled non-terminal blocks */
       .expressive-code.has-title:not(.is-terminal) figcaption .cb-fullscreen__button {
-        margin-top: 0.25rem;
+        margin-top: 0.2rem;
       }
 
       /* Override hover effects for header buttons - keep them stable */
@@ -923,7 +923,8 @@ export function pluginFullscreen(options: FullscreenPluginOptions = {}) {
             const originalButton = fullscreenState.originalCodeBlock.querySelector('.cb-fullscreen__button');
             if (originalButton) {
               originalButton.setAttribute('aria-expanded', 'false');
-              originalButton.blur();
+              // Return focus to the button for keyboard users
+              originalButton.focus();
             }
           }
 
