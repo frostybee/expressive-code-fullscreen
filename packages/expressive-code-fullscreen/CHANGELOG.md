@@ -1,5 +1,11 @@
 # expressive-code-fullscreen
 
+## 2.0.0
+
+### Major Changes
+
+- f24f8af: Drop Node 18 support and upgrade to Expressive Code 0.44, Astro v7, and Starlight 0.41
+
 ## 1.1.0
 
 ### Minor Changes
