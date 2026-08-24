@@ -4,31 +4,30 @@
   "license": "MIT",
   "description": "Add fullscreen functionality to codeblocks in your documentation website.",
   "author": "frostybee",
-  "type": "module",  
-  
-  "devDependencies": {    
+  "type": "module",
+  "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "eslint": "^9.27.0",
     "prettier": "^3.5.3",
-    "prettier-plugin-astro": "^0.14.1",    
+    "prettier-plugin-astro": "^0.14.1",
     "tsup": "^8.3.5"
-  },  
+  },
   "dependencies": {
-		"@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.5"
-	},
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^3.0.1"
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
-  "packageManager": "pnpm@10.26.0",
+  "packageManager": "pnpm@10.26.1",
   "sideEffects": false,
-  "private": true,  
-  "scripts": {          
+  "private": true,
+  "scripts": {
     "build": "pnpm -F expressive-code-fullscreen build",
-    "build:docs": "pnpm -F expressive-code-fullscreen/docs build",
-    "start:docs": "pnpm -F expressive-code-fullscreen/docs start",
+    "build:docs": "pnpm -F expressive-code-fullscreen-docs build",
+    "start:docs": "pnpm -F expressive-code-fullscreen-docs start",
     "ci-version": "changeset version && pnpm install --no-frozen-lockfile",
-		"ci-publish": "pnpm build && changeset publish"
+    "ci-publish": "pnpm build && changeset publish"
   }
 }
